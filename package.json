@@ -9,5 +9,9 @@
   "devDependencies": {
     "@rencomputer/rencal-sdk": "^0.2.0",
     "@types/react": "19.3.0"
+  },
+  "dependencies": {
+    "@tauri-apps/plugin-opener": "^2.7.3",
+    "simple-icons": "^16.38.0"
   }
 }

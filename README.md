@@ -9,7 +9,7 @@ A board view for [renCal](https://rencal.org) with columns for yesterday, today,
 Add the repository to `~/.config/rencal/plugins.toml`:
 
 ```toml
-plugins = ["dhanushk-offl/rencal-view-board"]
+plugins = ["d5v7/rencal-view-board"]
 ```
 
 ## Development
@@ -39,3 +39,11 @@ git push origin v0.1.0
 ```
 
 The [release workflow](.github/workflows/release.yml) builds the view and publishes a release with `dist/board.js` and `dist/board.css` attached for every `v*` tag. renCal installs the latest release and shows its tag as the version.
+
+## Board details
+
+Event titles wrap to use the available column width. Locations and recognized video
+meeting links are shown on the card; select the meeting icon and time to open it in the
+system browser. Links are detected in the event URL, location, and description.
+The current renCal SDK does not expose tasks or separately stored conference data,
+so those cannot yet be shown or distinguished by this view.
