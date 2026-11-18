@@ -1,5 +1,5 @@
 import { openUrl } from "@tauri-apps/plugin-opener"
-import { memo } from "react"
+import { memo, useState } from "react"
 import { siGooglemeet, siJitsi, siProton, siWebex, siZoom } from "simple-icons"
 
 import {
@@ -35,6 +35,7 @@ function MeetingIcon({ provider }: { provider: MeetingProvider }) {
 }
 
 export const BoardCard = memo(function BoardCard({ event, showDate }: { event: CalendarEvent; showDate?: boolean }) {
+  const [joinError, setJoinError] = useState(false)
   const { timeFormat } = useDisplaySettings()
   const eventProps = useEventProps(event)
   const meeting = findMeeting(event)
@@ -60,7 +61,7 @@ export const BoardCard = memo(function BoardCard({ event, showDate }: { event: C
           <div className="board-meta text-xs text-muted-foreground">
             {showDate && <span data-typography="numerical" className="board-date">{formatShortDate(event.start)} ·</span>}
             {meeting ? (
-              <button type="button" data-slot="calendar-event-time" data-typography="numerical" className="board-time board-join" title={`Join ${meeting.provider} meeting`} aria-label={`Join ${meeting.provider} meeting, ${time}`} onClick={(e) => { e.stopPropagation(); void openUrl(meeting.url) }}>
+              <button type="button" data-slot="calendar-event-time" data-typography="numerical" className="board-time board-join" title={`Join ${meeting.provider} meeting`} aria-label={`Join ${meeting.provider} meeting, ${time}`} onClick={(e) => { e.stopPropagation(); setJoinError(false); void openUrl(meeting.url).catch(() => setJoinError(true)) }}>
                 <MeetingIcon provider={meeting.provider} /><span>{time}</span>
               </button>
             ) : (
@@ -68,6 +69,7 @@ export const BoardCard = memo(function BoardCard({ event, showDate }: { event: C
             )}
             {location && <span className="board-location" title={location}><LocationIcon /><span className="board-location-text">{location}</span></span>}
           </div>
+          {joinError && <div role="alert" className="board-join-error text-xs">Could not open the meeting. Please try again.</div>}
         </div>
       </div>
     </div>

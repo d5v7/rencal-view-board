@@ -32,3 +32,23 @@ test('retains physical location while removing a meeting URL', () => {
   assert.equal(displayLocation('Room 3', meeting), 'Room 3')
   assert.equal(displayLocation(null, meeting), null)
 })
+
+test('recognizes Whereby subdomains without accepting lookalike hosts', () => {
+  const url = 'https://example.whereby.com/room'
+  assert.deepEqual(findMeeting(event({ url })), { provider: 'Whereby', url })
+  assert.equal(findMeeting(event({ url: 'https://notwhereby.com/room' })), null)
+  assert.equal(findMeeting(event({ url: 'https://whereby.com.evil.example/room' })), null)
+})
+
+test('skips ordinary provider pages and continues searching for a meeting', () => {
+  const location = 'https://meet.google.com/abc-defg-hij'
+  for (const url of ['https://whereby.com/information/tos', 'https://whereby.com/pricing', 'https://zoom.us/j/', 'https://teams.microsoft.com/about']) {
+    assert.deepEqual(findMeeting(event({ url, location })), { provider: 'Google Meet', url: location })
+  }
+})
+
+test('preserves a location meeting URL when another meeting was selected', () => {
+  const location = 'Room 3, https://meet.google.com/abc-defg-hij'
+  const meeting = findMeeting(event({ url: 'https://company.zoom.us/j/123', location }))
+  assert.equal(displayLocation(location, meeting), location)
+})

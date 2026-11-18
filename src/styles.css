@@ -19,6 +19,7 @@
   .board-location-text { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .board-icon { width: 0.875rem; height: 0.875rem; flex: none; }
   .board-join { display: inline-flex; align-items: center; gap: 0.3rem; text-align: left; cursor: pointer; color: inherit; }
+  .board-join-error { margin-top: 0.25rem; }
   .board-join:hover { color: var(--foreground); text-decoration: underline; text-underline-offset: 2px; }
   .board-join:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
 }
